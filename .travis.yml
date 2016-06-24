@@ -13,7 +13,3 @@ before_script:
 
 script:
   - phpunit -c app
-
-notifications:
-  email:
-    -  michalsolarz83@gmail.com
