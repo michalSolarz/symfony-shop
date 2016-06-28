@@ -12,5 +12,5 @@ before_script:
 
 script:
   - ./bin/phpspec run -f pretty
-  - ./bin/behat --no-snippets --no-paths --verbose --format=progress
+  - ./bin/behat --no-snippets --verbose --format=progress
   - phpunit -c app
