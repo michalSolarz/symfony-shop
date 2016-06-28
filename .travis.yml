@@ -14,3 +14,6 @@ script:
   - ./bin/phpspec run -f pretty
   - ./bin/behat --no-snippets --verbose --format=progress
   - phpunit -c app
+
+notifications:
+  email: false
