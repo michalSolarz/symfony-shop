@@ -11,4 +11,6 @@ before_script:
   - php app/console doctrine:fixtures:load -n --env=test
 
 script:
+  - ./bin/phpspec run -f pretty
+  - ./bin/behat --no-snippets --no-paths --verbose --format=progress
   - phpunit -c app
