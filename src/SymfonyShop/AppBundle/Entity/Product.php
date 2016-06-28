@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace SymfonyShop\AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Product
  *
  * @ORM\Table(name="product")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\ProductRepository")
+ * @ORM\Entity(repositoryClass="SymfonyShop\AppBundle\Repository\ProductRepository")
  */
 class Product
 {

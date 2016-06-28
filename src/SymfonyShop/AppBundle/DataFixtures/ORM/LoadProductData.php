@@ -6,10 +6,10 @@
  * Time: 00:39
  */
 
-namespace AppBundle\DataFixtures\ORM;
+namespace SymfonyShop\AppBundle\DataFixtures\ORM;
 
 
-use AppBundle\Entity\Product;
+use SymfonyShop\AppBundle\Entity\Product;
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
