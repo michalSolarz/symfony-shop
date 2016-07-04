@@ -6,23 +6,25 @@
     <table>
         <thead>
             <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Isvisible</th>
-                <th>Isavailable</th>
-                <th>Onstockamount</th>
+                <th>{{ knp_pagination_sortable(pagination, 'Id', 'p.id') }}</th>
+                <th>{{ knp_pagination_sortable(pagination, 'Name', 'p.name') }}</th>
+                <th>{{ knp_pagination_sortable(pagination, 'Is visible', 'p.isVisible') }}</th>
+                <th>{{ knp_pagination_sortable(pagination, 'Is available', 'p.isAvailable') }}</th>
+                <th>{{ knp_pagination_sortable(pagination, 'Price', 'p.price.amount') }}</th>
+                <th>{{ knp_pagination_sortable(pagination, 'On stock amount', 'p.onStockAmount') }}</th>
                 <th>Introduction</th>
                 <th>Description</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
-        {% for product in products %}
+        {% for product in pagination %}
             <tr>
                 <td><a href="{{ path('product_show', { 'id': product.id }) }}">{{ product.id }}</a></td>
                 <td>{{ product.name }}</td>
                 <td>{% if product.isVisible %}Yes{% else %}No{% endif %}</td>
                 <td>{% if product.isAvailable %}Yes{% else %}No{% endif %}</td>
+                <td>{{ product.price / constant('AppBundle\\Entity\\ValueObject\\Money::DIVISOR') }} {{ product.currency }}</td>
                 <td>{{ product.onStockAmount }}</td>
                 <td>{{ product.introduction }}</td>
                 <td>{{ product.description }}</td>
@@ -37,6 +39,8 @@
         {% endfor %}
         </tbody>
     </table>
-
+    <div class="navigation">
+        {{ knp_pagination_render(pagination) }}
+    </div>
     
 {% endblock %}

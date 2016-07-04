@@ -12,4 +12,21 @@ use Doctrine\ORM\EntityRepository;
  */
 class ProductRepository extends EntityRepository
 {
+    public function getQueryForAdminPagination()
+    {
+        $query = $this->getEntityManager()
+            ->createQueryBuilder()
+            ->select('p.id, 
+            p.name, 
+            p.isVisible, 
+            p.isAvailable, 
+            p.onStockAmount, 
+            p.price.amount AS price, 
+            p.price.currency AS currency,
+            p.introduction, 
+            p.description')
+            ->from('AppBundle:Product', 'p')
+            ->getQuery();
+        return $query;
+    }
 }

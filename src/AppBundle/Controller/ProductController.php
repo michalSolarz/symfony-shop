@@ -16,14 +16,19 @@ class ProductController extends Controller
     /**
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $products = $em->getRepository('AppBundle:Product')->findAll();
+        $paginator = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $em->getRepository('AppBundle:Product')->getQueryForAdminPagination(),
+            $request->query->getInt('page', 1),
+            15
+        );
 
         return $this->render('product/index.html.twig', array(
-            'products' => $products,
+            'pagination' => $pagination,
         ));
     }
 
