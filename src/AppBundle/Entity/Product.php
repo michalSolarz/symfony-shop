@@ -51,6 +51,9 @@ class Product
      */
     private $description;
 
+    /**
+     * Product constructor.
+     */
     public function __construct()
     {
         $this->price = new Money(0, 'PLN');
@@ -75,11 +78,13 @@ class Product
     }
 
     /**
-     * @param mixed $name
+     * @param $name
+     * @return $this
      */
     public function setName($name)
     {
         $this->name = $name;
+        return $this;
     }
 
     /**
@@ -91,11 +96,13 @@ class Product
     }
 
     /**
-     * @param mixed $isVisible
+     * @param $isVisible
+     * @return $this
      */
     public function setIsVisible($isVisible)
     {
         $this->isVisible = $isVisible;
+        return $this;
     }
 
     /**
@@ -107,11 +114,13 @@ class Product
     }
 
     /**
-     * @param mixed $isAvailable
+     * @param $isAvailable
+     * @return $this
      */
     public function setIsAvailable($isAvailable)
     {
         $this->isAvailable = $isAvailable;
+        return $this;
     }
 
     /**
@@ -123,15 +132,17 @@ class Product
     }
 
     /**
-     * @param mixed $onStockAmount
+     * @param $onStockAmount
+     * @return $this
      */
     public function setOnStockAmount($onStockAmount)
     {
         $this->onStockAmount = $onStockAmount;
+        return $this;
     }
 
     /**
-     * @return mixed
+     * @return Money
      */
     public function getPrice()
     {
@@ -139,11 +150,13 @@ class Product
     }
 
     /**
-     * @param mixed $price
+     * @param Money $price
+     * @return $this
      */
-    public function setPrice($price)
+    public function setPrice(Money $price)
     {
         $this->price = $price;
+        return $this;
     }
 
     /**
@@ -155,11 +168,13 @@ class Product
     }
 
     /**
-     * @param mixed $introduction
+     * @param $introduction
+     * @return $this
      */
     public function setIntroduction($introduction)
     {
         $this->introduction = $introduction;
+        return $this;
     }
 
     /**
@@ -171,11 +186,13 @@ class Product
     }
 
     /**
-     * @param mixed $description
+     * @param $description
+     * @return $this
      */
     public function setDescription($description)
     {
         $this->description = $description;
+        return $this;
     }
 
 }
