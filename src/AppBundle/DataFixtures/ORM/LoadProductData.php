@@ -24,8 +24,8 @@ class LoadProductData implements FixtureInterface
             $product->setName("Product {$i}");
             $i % 4 === 0 ? $product->setIsVisible(true) : $product->setIsVisible(false);
             $i % 2 === 0 ? $product->setIsAvailable(true) : $product->setIsAvailable(false);
-            $product->setPrice(rand(15 + $i, 200 + $i));
             $i % 2 === 0 ? $product->setOnStockAmount($i) : $product->setOnStockAmount(0);
+            $product->setIntroduction('Lorem ipsum');
             $product->setDescription('Lorem ipsum');
             $product->setPrice(new Money($i * 100, 'PLN'));
             $manager->persist($product);
