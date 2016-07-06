@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Product;
+use AppBundle\Model\ProductSearchConditions;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -18,16 +19,29 @@ class ProductController extends Controller
      */
     public function indexAction(Request $request)
     {
+        $searchConditions = new ProductSearchConditions();
         $em = $this->getDoctrine()->getManager();
-
+        $searchForm = $this->createSearchForm($searchConditions);
+//        var_dump($searchForm);die();
         $paginator = $this->get('knp_paginator');
-        $pagination = $paginator->paginate(
-            $em->getRepository('AppBundle:Product')->getQueryForAdminPagination(),
-            $request->query->getInt('page', 1),
-            15
-        );
+        $pagination = null;
+        $searchForm->handleRequest($request);
+        if ($searchForm->isSubmitted() && $searchForm->isValid()) {
+            $pagination = $paginator->paginate(
+                $em->getRepository('AppBundle:Product')->getQueryForAdminPagination($searchConditions),
+                $request->query->getInt('page', 1),
+                15
+            );
+        }else{
+            $pagination = $paginator->paginate(
+                $em->getRepository('AppBundle:Product')->getQueryForAdminPagination(),
+                $request->query->getInt('page', 1),
+                15
+            );
+        }
 
         return $this->render('product/index.html.twig', array(
+            'form' => $searchForm->createView(),
             'pagination' => $pagination,
         ));
     }
@@ -126,5 +140,11 @@ class ProductController extends Controller
             ->setAction($this->generateUrl('product_delete', array('id' => $product->getId())))
             ->setMethod('DELETE')
             ->getForm();
+    }
+
+    private function createSearchForm(ProductSearchConditions $productSearchConditions)
+    {
+        return $this->createForm('AppBundle\Form\ProductSearchType', $productSearchConditions, array(
+            'method' => 'GET'));
     }
 }
