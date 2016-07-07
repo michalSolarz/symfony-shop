@@ -31,11 +31,14 @@ class ProductSearchType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver)
     {
+        $resolver->setDefaults(array(
+            'csrf_protection' => false,
+        ));
 
     }
 
     public function getName()
     {
-        return 'app_bundle_product_search_type';
+        return null;
     }
 }
