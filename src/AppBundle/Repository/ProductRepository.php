@@ -2,7 +2,7 @@
 
 namespace AppBundle\Repository;
 
-use AppBundle\Model\ProductSearchConditions;
+use AppBundle\Model\BackendProductSearch\ProductSearchConditions;
 use Doctrine\ORM\EntityRepository;
 
 /**

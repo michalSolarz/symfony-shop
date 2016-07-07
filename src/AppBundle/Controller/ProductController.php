@@ -3,7 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Product;
-use AppBundle\Model\ProductSearchConditions;
+use AppBundle\Model\BackendProductSearch\ProductSearchConditions;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -15,6 +15,8 @@ class ProductController extends Controller
 {
 
     /**
+     * @param Request $request
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function indexAction(Request $request)
@@ -22,7 +24,6 @@ class ProductController extends Controller
         $searchConditions = new ProductSearchConditions();
         $em = $this->getDoctrine()->getManager();
         $searchForm = $this->createSearchForm($searchConditions);
-//        var_dump($searchForm);die();
         $paginator = $this->get('knp_paginator');
         $pagination = null;
         $searchForm->handleRequest($request);
@@ -32,7 +33,7 @@ class ProductController extends Controller
                 $request->query->getInt('page', 1),
                 15
             );
-        }else{
+        } else {
             $pagination = $paginator->paginate(
                 $em->getRepository('AppBundle:Product')->getQueryForAdminPagination(),
                 $request->query->getInt('page', 1),
@@ -145,6 +146,9 @@ class ProductController extends Controller
     private function createSearchForm(ProductSearchConditions $productSearchConditions)
     {
         return $this->createForm('AppBundle\Form\ProductSearchType', $productSearchConditions, array(
-            'method' => 'GET'));
+                'method' => 'GET',
+                'allow_extra_fields' => true,
+            )
+        )->add('Search', 'submit');
     }
 }
