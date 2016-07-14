@@ -22,3 +22,8 @@ product_delete:
     path:     /{id}/delete
     defaults: { _controller: "AppBundle:Product:delete" }
     methods:  DELETE
+
+product_test:
+    path:     /test
+    defaults: { _controller: "AppBundle:Product:test" }
+    methods:  GET

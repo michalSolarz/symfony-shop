@@ -10,8 +10,7 @@ class ProductType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('id', 'hidden')
-            ->add('name', 'text')
+        $builder->add('name', 'text')
             ->add('isVisible', 'checkbox')
             ->add('isAvailable', 'checkbox')
             ->add('onStockAmount', 'number')

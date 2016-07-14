@@ -3,6 +3,8 @@
 namespace AppBundle\Repository;
 
 use AppBundle\Model\BackendProductSearch\ProductSearchConditions;
+use AppBundle\Model\BackendProductSearch\QueryConditionInterface;
+use AppBundle\Model\BackendProductSearch\QueryConditionsContainer;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -13,35 +15,29 @@ use Doctrine\ORM\EntityRepository;
  */
 class ProductRepository extends EntityRepository
 {
-    public function getQueryForAdminPagination(ProductSearchConditions $productSearchConditions = null)
+
+    /**
+     * @param QueryConditionsContainer|null $queryConditions
+     * @return \Doctrine\ORM\Query
+     */
+    public function getQueryForAdminPagination(QueryConditionsContainer $queryConditions = null)
+    {
+        $queryBuilder = $this->generateQueryForAdminSearch($queryConditions);
+
+        return $queryBuilder->getQuery();
+    }
+
+    /**
+     * @param QueryConditionsContainer|null $queryConditions
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    private function generateQueryForAdminSearch(QueryConditionsContainer $queryConditions = null)
     {
         $queryBuilder = $this->getEntityManager()
             ->createQueryBuilder();
 
-        $queryConditions = array();
-        if (!is_null($productSearchConditions)) {
-            if ($productSearchConditions->hasProductName()) {
-                $queryConditions['expressions'][] = $queryBuilder->expr()->like('p.name', ':productName');
-                $queryConditions['parameters']['productName'] = "%{$productSearchConditions->getProductName()}%";
-            }
-            if ($productSearchConditions->hasProductIsVisible()) {
-                $queryConditions['expressions'][] = $queryBuilder->expr()->eq('p.isVisible', ':isVisible');
-                $queryConditions['parameters']['isVisible'] = $productSearchConditions->getProductIsVisible();
-            }
-            if ($productSearchConditions->hasProductIsAvailable()) {
-                $queryConditions['expressions'][] = $queryBuilder->expr()->eq('p.isAvailable', ':isAvailable');
-                $queryConditions['parameters']['isAvailable'] = $productSearchConditions->getProductIsAvailable();
-            }
-            if ($productSearchConditions->hasProductIntroduction()) {
-                $queryConditions['expressions'][] = $queryBuilder->expr()->like('p.introduction', ':introduction');
-                $queryConditions['parameters']['introduction'] = "%{$productSearchConditions->getProductIntroduction()}%";
-            }
-            if ($productSearchConditions->hasProductDescription()) {
-                $queryConditions['expressions'][] = $queryBuilder->expr()->like('p.description', ':description');
-                $queryConditions['parameters']['description'] = "%{$productSearchConditions->getProductDescription()}%";
-            }
-        }
-        $query = $queryBuilder
+
+        $queryBuilder
             ->select('p.id, 
             p.name, 
             p.isVisible, 
@@ -52,16 +48,17 @@ class ProductRepository extends EntityRepository
             p.introduction, 
             p.description')
             ->from('AppBundle:Product', 'p');
-        if (!empty($queryConditions)) {
+
+        if (!is_null($queryConditions) && $queryConditions->hasQueryConditions()) {
             $andX = $queryBuilder->expr()->andX();
-            foreach ($queryConditions['expressions'] as $expression) {
-                $andX->add($expression);
+            foreach ($queryConditions->getQueryConditions() as $queryCondition) {
+                $andX->add($queryCondition->getQueryExpression());
+                $parameter = $queryCondition->getParameter();
+                $queryBuilder->setParameter($parameter->getParameterAlias(), $parameter->getParameterValue());
             }
-            $queryBuilder->add('where', $andX)
-                ->setParameters($queryConditions['parameters']);
+            $queryBuilder->add('where', $andX);
         };
 
-
-        return $query->getQuery();
+        return $queryBuilder;
     }
 }
