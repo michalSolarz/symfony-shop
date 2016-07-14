@@ -11,5 +11,8 @@ namespace AppBundle\Tests\Model\BackendProductSearch;
 
 class ExactParameterTest extends \PHPUnit_Framework_TestCase
 {
+    public function testConstruct()
+    {
 
+    }
 }

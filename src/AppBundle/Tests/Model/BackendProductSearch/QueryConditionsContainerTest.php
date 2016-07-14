@@ -11,5 +11,8 @@ namespace AppBundle\Tests\Model\BackendProductSearch;
 
 class QueryConditionsContainerTest extends \PHPUnit_Framework_TestCase
 {
+    public function testConstruct()
+    {
 
+    }
 }
