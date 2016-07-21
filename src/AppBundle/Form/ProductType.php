@@ -10,11 +10,21 @@ class ProductType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('name', 'text')
-            ->add('isVisible', 'checkbox')
-            ->add('isAvailable', 'checkbox')
-            ->add('onStockAmount', 'number')
-            ->add('price', MoneyType::class)
+        $builder->add('name', 'text', array(
+            'required' => true,
+        ))
+            ->add('isVisible', 'checkbox', array(
+                'required' => false,
+            ))
+            ->add('isAvailable', 'checkbox', array(
+                'required' => false,
+            ))
+            ->add('onStockAmount', 'number', array(
+                'required' => true,
+            ))
+            ->add('price', MoneyType::class, array(
+                'required' => true,
+            ))
             ->add('introduction', 'textarea')
             ->add('description', 'textarea');
     }
