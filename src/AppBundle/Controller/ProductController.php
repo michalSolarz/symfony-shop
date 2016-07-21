@@ -30,13 +30,13 @@ class ProductController extends Controller
         if ($searchForm->isSubmitted() && $searchForm->isValid()) {
             $r = $this->get('app.backend_product_search.query_conditions_provider')->getQueryConditionsFromProductSearchConditions($searchConditions);
             $pagination = $paginator->paginate(
-                $em->getRepository('AppBundle:Product')->getQueryForAdminPagination($r),
+                $em->getRepository('AppBundle:Product')->getQueryForAdminList($r),
                 $request->query->getInt('page', 1),
                 15
             );
         } else {
             $pagination = $paginator->paginate(
-                $em->getRepository('AppBundle:Product')->getQueryForAdminPagination(),
+                $em->getRepository('AppBundle:Product')->getQueryForAdminList(),
                 $request->query->getInt('page', 1),
                 15
             );
@@ -161,7 +161,7 @@ class ProductController extends Controller
         foreach ($r->getQueryConditions() as $item) {
 //            var_dump($item);
         }
-        $query = $this->getDoctrine()->getEntityManager()->getRepository('AppBundle:Product')->getQueryForAdminPagination($r);
+        $query = $this->getDoctrine()->getEntityManager()->getRepository('AppBundle:Product')->getQueryForAdminList($r);
         var_dump($query);
 //        die();
     }

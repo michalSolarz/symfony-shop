@@ -20,11 +20,18 @@ class ProductRepository extends EntityRepository
      * @param QueryConditionsContainer|null $queryConditions
      * @return \Doctrine\ORM\Query
      */
-    public function getQueryForAdminPagination(QueryConditionsContainer $queryConditions = null)
+    public function getQueryForAdminList(QueryConditionsContainer $queryConditions = null)
     {
-        $queryBuilder = $this->generateQueryForAdminSearch($queryConditions);
+        return $this->generateQueryForAdminSearch($queryConditions)->getQuery();
+    }
 
-        return $queryBuilder->getQuery();
+    /**
+     * @param QueryConditionsContainer|null $queryConditions
+     * @return array
+     */
+    public function getArrayResultsForAdminList(QueryConditionsContainer $queryConditions = null)
+    {
+        return $this->generateQueryForAdminSearch($queryConditions)->getQuery()->getArrayResult();
     }
 
     /**
@@ -58,6 +65,44 @@ class ProductRepository extends EntityRepository
             }
             $queryBuilder->add('where', $andX);
         };
+
+        return $queryBuilder;
+    }
+
+    /**
+     * @return \Doctrine\ORM\Query
+     */
+    public function getQueryForCustomerHomepage()
+    {
+        return $this->generateQueryForCustomerHomepage()->getQuery();
+    }
+
+    /**
+     * @return array
+     */
+    public function getArrayResultForCustomerHomepage()
+    {
+        return $this->generateQueryForCustomerHomepage()->getQuery()->getArrayResult();
+    }
+
+    /**
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    private function generateQueryForCustomerHomepage()
+    {
+        $queryBuilder = $this->getEntityManager()
+            ->createQueryBuilder();
+
+        $queryBuilder->select('p.id, 
+            p.name,
+            p.onStockAmount, 
+            p.price.amount AS price, 
+            p.price.currency AS currency,
+            p.introduction, 
+            p.description'
+        )->from('AppBundle:Product', 'p')
+            ->where('p.isVisible = :isVisible')
+            ->andWhere('p.isAvailable = :isAvailable');
 
         return $queryBuilder;
     }
